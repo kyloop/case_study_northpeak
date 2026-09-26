@@ -1,0 +1,9 @@
+part_number,supplier_name,fiscal_period,submitted_unit_cost,material_cost,labor_cost,overhead_cost,margin_pct,currency,submitted_by
+ENC-1018,Cascade Technologies,FY26-Q4,3.395,2.037,0.611,0.747,10.38,USD,s.patel@vendor-portal.example
+BAT-1011,Ferncrest Components,FY26-Q4,3.545,2.127,0.638,0.78,11.93,USD,m.chen@vendor-portal.example
+CAM-1022,Copperfield Precision,FY26-Q4,7.71,4.626,1.388,1.696,8.74,USD,a.osei@vendor-portal.example
+SNS-1025,Copperfield Technologies,FY26-Q4,5.414,3.248,0.975,1.191,11.31,USD,j.alvarez@vendor-portal.example
+BAT-1035,Meridian Technologies,FY26-Q4,3.208,1.925,0.577,0.706,6.81,USD,t.nakamura@vendor-portal.example
+ENC-1051,Ferncrest Precision,FY26-Q4,3.254,1.952,0.586,0.716,8.5,USD,m.chen@vendor-portal.example
+SNS-1014,Ashgrove Technologies,FY26-Q4,5.148,3.089,0.927,1.132,10.48,USD,r.kowalski@vendor-portal.example
+ANT-1022,Ironwood Assembly,FY26-Q4,1.401,0.841,0.252,0.308,5.4,USD,j.alvarez@vendor-portal.example

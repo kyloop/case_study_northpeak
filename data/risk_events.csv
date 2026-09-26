@@ -1,0 +1,16 @@
+event_id,facility_id,event_type,severity,event_date,description,status
+1,22,earthquake,5,2025-11-26,Regional seismic event near facility; production paused for inspection.,monitoring
+2,27,earthquake,1,2026-08-20,Regional seismic event near facility; production paused for inspection.,open
+3,21,labor_strike,2,2026-08-06,Labor action at facility reduced line throughput for several days.,resolved
+4,27,flood,1,2026-09-01,Seasonal flooding affected access roads and on-site inventory storage.,resolved
+5,2,typhoon,5,2026-02-13,Tropical storm warning issued; port and inbound logistics disrupted.,resolved
+6,13,labor_strike,1,2026-03-11,Labor action at facility reduced line throughput for several days.,resolved
+7,6,flood,2,2026-06-19,Seasonal flooding affected access roads and on-site inventory storage.,monitoring
+8,15,typhoon,1,2025-11-12,Tropical storm warning issued; port and inbound logistics disrupted.,resolved
+9,8,flood,4,2026-02-24,Seasonal flooding affected access roads and on-site inventory storage.,resolved
+10,16,earthquake,1,2026-05-02,Regional seismic event near facility; production paused for inspection.,monitoring
+11,14,typhoon,5,2026-05-18,Tropical storm warning issued; port and inbound logistics disrupted.,resolved
+12,26,single_source_dependency,1,2026-03-11,Facility identified as sole qualified source for this commodity in the region.,resolved
+13,12,labor_strike,5,2026-01-17,Labor action at facility reduced line throughput for several days.,monitoring
+14,19,single_source_dependency,3,2026-03-08,Facility identified as sole qualified source for this commodity in the region.,monitoring
+15,1,flood,5,2026-06-02,Seasonal flooding affected access roads and on-site inventory storage.,open

@@ -1,0 +1,29 @@
+facility_id,supplier_id,name,country,latitude,longitude,facility_type
+1,1,Meridian Electronics Fab SOU,South Korea,36.086,129.292,Fab
+2,1,Meridian Electronics Fab THA,Thailand,14.6727,99.5413,Fab
+3,2,Meridian Technologies Assembly SOU,South Korea,36.7892,127.4543,Assembly
+4,2,Meridian Technologies Warehouse THA,Thailand,15.9873,102.3132,Warehouse
+5,3,Cascade Circuits Fab VIE,Vietnam,14.6451,108.4109,Fab
+6,4,Cascade Technologies Fab VIE,Vietnam,13.4805,107.2745,Fab
+7,4,Cascade Technologies Assembly PHI,Philippines,14.3157,122.5859,Assembly
+8,5,Ashgrove Systems Fab PHI,Philippines,13.925,121.823,Fab
+9,6,Cascade Precision Assembly MAL,Malaysia,4.3181,102.7359,Assembly
+10,7,Redwood Components Fab CHI,China,35.8658,103.0356,Fab
+11,8,Ferncrest Components Assembly PHI,Philippines,12.1184,121.0226,Assembly
+12,8,Ferncrest Components Fab VIE,Vietnam,12.857,108.258,Fab
+13,9,Copperfield Technologies Assembly MAL,Malaysia,3.0852,101.8258,Assembly
+14,9,Copperfield Technologies Warehouse PHI,Philippines,12.983,122.1198,Warehouse
+15,10,Ironwood Assembly Assembly MEX,Mexico,24.2388,-102.803,Assembly
+16,10,Ironwood Assembly Fab CHI,China,35.7143,104.2527,Fab
+17,11,Vantree Electronics Assembly CHI,China,34.4631,104.3618,Assembly
+18,12,Alder Circuits Warehouse TAI,Taiwan,22.8868,122.2163,Warehouse
+19,13,Ferncrest Precision Assembly MEX,Mexico,22.9354,-102.5438,Assembly
+20,14,Brightpoint Circuits Assembly POL,Poland,52.1286,18.329,Assembly
+21,14,Brightpoint Circuits Assembly SOU,South Korea,35.5712,126.5908,Assembly
+22,15,Alder Precision Assembly THA,Thailand,16.9915,99.5625,Assembly
+23,16,Ashgrove Sensor Works Warehouse TAI,Taiwan,23.4079,120.5179,Warehouse
+24,16,Ashgrove Sensor Works Fab MEX,Mexico,22.6748,-102.3911,Fab
+25,17,Pinnacle Components Assembly THA,Thailand,15.1494,102.1698,Assembly
+26,18,Blackstone Components Assembly IND,India,19.3937,79.4564,Assembly
+27,18,Blackstone Components Assembly TAI,Taiwan,25.107,122.2791,Assembly
+28,19,Copperfield Precision Warehouse THA,Thailand,15.8441,101.994,Warehouse

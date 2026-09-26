@@ -1,0 +1,46 @@
+part_id,part_number,description,commodity,uom,target_cost
+1,BAT-1007,Battery Cell rev B,Battery Cell,EA,2.638
+2,CON-1008,Connector rev C,Connector,EA,0.434
+3,ANT-1009,RF Antenna rev B,RF Antenna,EA,1.505
+4,BAT-1011,Battery Cell rev A,Battery Cell,EA,3.003
+5,CAM-1009,Camera Module rev B,Camera Module,EA,7.782
+6,SNS-1001,Sensor Module rev C,Sensor Module,EA,4.551
+7,ENC-1009,Enclosure rev C,Enclosure,EA,2.374
+8,SNS-1004,Sensor Module rev A,Sensor Module,EA,3.685
+9,ANT-1013,RF Antenna rev C,RF Antenna,EA,1.366
+10,BAT-1012,Battery Cell rev B,Battery Cell,EA,3.403
+11,ANT-1022,RF Antenna rev B,RF Antenna,EA,1.318
+12,BAT-1018,Battery Cell rev B,Battery Cell,EA,2.931
+13,BAT-1023,Battery Cell rev A,Battery Cell,EA,3.202
+14,SNS-1012,Sensor Module rev C,Sensor Module,EA,4.614
+15,SNS-1014,Sensor Module rev C,Sensor Module,EA,4.473
+16,CON-1011,Connector rev A,Connector,EA,0.55
+17,BAT-1029,Battery Cell rev B,Battery Cell,EA,2.988
+18,ENC-1018,Enclosure rev C,Enclosure,EA,2.942
+19,ENC-1027,Enclosure rev C,Enclosure,EA,2.218
+20,CON-1013,Connector rev A,Connector,EA,0.552
+21,CON-1015,Connector rev C,Connector,EA,0.543
+22,CAM-1012,Camera Module rev C,Camera Module,EA,8.535
+23,BAT-1035,Battery Cell rev C,Battery Cell,EA,2.887
+24,ENC-1032,Enclosure rev B,Enclosure,EA,2.736
+25,ENC-1033,Enclosure rev B,Enclosure,EA,2.306
+26,ENC-1038,Enclosure rev B,Enclosure,EA,2.256
+27,ENC-1041,Enclosure rev B,Enclosure,EA,2.873
+28,BAT-1043,Battery Cell rev B,Battery Cell,EA,3.319
+29,CAM-1013,Camera Module rev C,Camera Module,EA,7.963
+30,BAT-1052,Battery Cell rev B,Battery Cell,EA,2.68
+31,CAM-1022,Camera Module rev A,Camera Module,EA,8.092
+32,SNS-1019,Sensor Module rev A,Sensor Module,EA,4.183
+33,CON-1019,Connector rev C,Connector,EA,0.505
+34,SNS-1025,Sensor Module rev B,Sensor Module,EA,4.881
+35,CAM-1025,Camera Module rev A,Camera Module,EA,10.861
+36,ENC-1044,Enclosure rev A,Enclosure,EA,3.225
+37,PCB-1001,PCB Assembly rev B,PCB Assembly,EA,6.268
+38,ENC-1051,Enclosure rev C,Enclosure,EA,3.044
+39,ENC-1055,Enclosure rev C,Enclosure,EA,2.487
+40,SNS-1032,Sensor Module rev B,Sensor Module,EA,5.035
+41,BAT-1056,Battery Cell rev B,Battery Cell,EA,3.648
+42,CON-1024,Connector rev A,Connector,EA,0.53
+43,BAT-1057,Battery Cell rev B,Battery Cell,EA,3.453
+44,CON-1029,Connector rev B,Connector,EA,0.538
+45,CON-1038,Connector rev C,Connector,EA,0.454

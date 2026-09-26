@@ -1,0 +1,21 @@
+supplier_id,name,region,tier,risk_rating,created_at
+1,Meridian Electronics,APAC,Tier1,Low,2025-01-15
+2,Meridian Technologies,APAC,Tier2,Low,2025-01-15
+3,Cascade Circuits,APAC,Tier1,Medium,2025-01-15
+4,Cascade Technologies,APAC,Tier2,Medium,2025-01-15
+5,Ashgrove Systems,APAC,Tier1,Medium,2025-01-15
+6,Cascade Precision,EMEA,Tier1,Low,2025-01-15
+7,Redwood Components,APAC,Tier1,Low,2025-01-15
+8,Ferncrest Components,Americas,Tier1,Medium,2025-01-15
+9,Copperfield Technologies,APAC,Tier1,Low,2025-01-15
+10,Ironwood Assembly,APAC,Tier2,Low,2025-01-15
+11,Vantree Electronics,APAC,Tier1,High,2025-01-15
+12,Alder Circuits,EMEA,Tier1,Low,2025-01-15
+13,Ferncrest Precision,APAC,Tier1,Low,2025-01-15
+14,Brightpoint Circuits,Americas,Tier2,Low,2025-01-15
+15,Alder Precision,EMEA,Tier1,Low,2025-01-15
+16,Ashgrove Sensor Works,APAC,Tier1,Low,2025-01-15
+17,Pinnacle Components,EMEA,Tier1,Low,2025-01-15
+18,Blackstone Components,APAC,Tier2,Low,2025-01-15
+19,Copperfield Precision,APAC,Tier1,Low,2025-01-15
+20,Ashgrove Technologies,APAC,Tier2,Medium,2025-01-15

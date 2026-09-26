@@ -1,0 +1,9 @@
+part_number,supplier_name,fiscal_period,submitted_unit_cost,material_cost,labor_cost,overhead_cost,margin_pct,currency,submitted_by
+SNS-9999,Unknown Supplier Co,FY26-Q4,4.5,2.7,0.8,1.0,8.0,USD,x@vendor.example
+ENC-1018,Cascade Technologies,FY26-Q4,-1.2,0.5,0.2,-1.9,5.0,USD,y@vendor.example
+BAT-1011,Ferncrest Components,FY26-Q4,,1.0,0.3,0.2,6.0,USD,z@vendor.example
+CAM-1022,Copperfield Precision,FY26-Q4,3.0,1.0,0.3,0.2,6.0,USD,
+SNS-1025,Copperfield Technologies,NOT-A-PERIOD,2.5,1.5,0.4,0.6,7.0,USD,w@vendor.example
+ENC-1018,Cascade Technologies,FY26-Q4,3.395,2.037,0.611,0.747,10.38,USD,s.patel@vendor-portal.example
+BAT-1011,Ferncrest Components,FY26-Q4,3.545,2.127,0.638,0.78,11.93,USD,m.chen@vendor-portal.example
+CAM-1022,Copperfield Precision,FY26-Q4,7.71,4.626,1.388,1.696,8.74,USD,a.osei@vendor-portal.example
