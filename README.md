@@ -217,3 +217,35 @@ split view, filter rules).
 | `test_plain_number_on_a_numeric_column_means_equals_not_contains` | `1` on `supplier_id` finds only supplier 1 (not 10 to 19); `!=1` excludes it; `0.434` finds one part and `0.43` finds none. |
 | `test_numeric_filters_leave_text_columns_alone_and_fall_back_for_non_numbers` | Text columns keep "contains"; non-numeric text in a number column matches nothing and does not crash. |
 
+## How it works
+
+```
+schema/schema.sql   tables, constraints, append-only triggers
+src/
+  validation.py     per-row checks (all problems on a row are reported)
+  ingest.py         CSV/Excel reader + process_upload(): validate, save valid rows, build report
+  shouldcost.py     should-cost estimates -> should_cost_estimates
+  review.py         flagging query + decide() (status change and audit row in one transaction)
+  risk.py           one-line supplier risk notes
+  browse.py         table filters and the relations used to link the two data tables
+  web.py            FastAPI: JSON API under /api + serves frontend/dist
+  cli.py            command line (init, upload, recompute, serve)
+frontend/           React + TypeScript + Vite app (pages/: Upload, Review, Data)
+```
+
+## Why each bad row in `bulk_upload_sample_with_errors.csv` is caught
+
+The pipeline saves the 3 valid rows and fails exactly these 5 (`row` is the data row number,
+starting at 1 under the header):
+
+| Row | What is wrong | Check that catches it |
+|---|---|---|
+| 1 | `SNS-9999` / `Unknown Supplier Co` | Part number not in `parts`, and supplier name not in `suppliers`. Both are reported. |
+| 2 | `submitted_unit_cost = -1.2`, `overhead_cost = -1.9` | Costs must be positive numbers. Both fields are named. |
+| 3 | `submitted_unit_cost` blank | Every column is required. |
+| 4 | `submitted_by` blank | Required field. It also fails the cost-sum check (components add to 1.5, submitted 3.0), so two errors are shown. |
+| 5 | `fiscal_period = NOT-A-PERIOD` | Must match `FY##-Q1..Q4`. |
+
+Other checks: `margin_pct` numeric in [0, 100); currency USD; `submitted_by` a valid email; and
+material + labor + overhead must equal the unit cost (within 0.005). The last one holds for all 250
+seed rows and the template, and margin is not added on top.
