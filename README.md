@@ -249,3 +249,84 @@ starting at 1 under the header):
 Other checks: `margin_pct` numeric in [0, 100); currency USD; `submitted_by` a valid email; and
 material + labor + overhead must equal the unit cost (within 0.005). The last one holds for all 250
 seed rows and the template, and margin is not added on top.
+
+## Decisions and why
+
+The brief left these open; the choices are mine and easy to change.
+
+| Area | Decision and why |
+|---|---|
+| **Upload: partial acceptance** | Valid rows are saved even when others fail, and every problem on a row is listed, so a file can be fixed in one pass. A file that cannot be read at all (wrong type, missing columns, empty) saves nothing. |
+| **Upload: duplicates** | "Same" means identical row content, enforced by a unique index. Re-uploading a file, or another file with the same rows, saves nothing and shows "already on file". Not keyed on part + supplier + period, because the seed data already has 34 such repeats with different costs; a different-cost resubmission is saved as pending with a warning. |
+| **Upload: new rows** | They enter as `pending`; approval happens only on the review screen. An uploaded row's `submitted_at` is the upload's UTC timestamp; seed rows keep their CSV dates. |
+| **Upload: file types** | `.csv`, and `.xlsx` or `.xlsm` (first sheet). `.xls` is rejected with a clear message. |
+| **Upload: suppliers and parts** | Any supplier may submit any part. The data has no supplier-to-part mapping to check against. |
+| **Should-cost** | The mean approved unit cost of the part's commodity, as the brief suggests, kept in its own table with the sample size (shown as "commodity avg, n=16"). Pending rows are unvetted and rejected ones are known bad, so neither counts. Trade-off: parts within a commodity can differ in cost, so a pricier part may be over-flagged. A commodity with no approved history gets no estimate, so nothing is flagged. Per-part averages were tried and dropped as confusing. |
+| **Flag threshold** | A submission is flagged when its unit cost is **more than 20% above its should-cost**: `(submitted_unit_cost / should_cost − 1) × 100 > 20`. The percentage can be updated by changing `NORTHPEAK_FLAG_PCT` in the config file (`src/config.py`). The brief only says "a lot higher", so 20% is my choice: seed prices range from 0.8x to 1.35x target, so 20% skips ordinary variation and catches the clear outliers. On the seed data it flags 8 of the 52 pending rows; 10% would flag 18 (too many to review) and 30% only 2 (it would miss real outliers). Only prices above should-cost are flagged, not unusually low ones. |
+| **Review screen** | A queue of pending, flagged rows, worst first. A decided row leaves the list, and approved or rejected rows never appear, even above the threshold (the seed statuses are random). Pending rows within the threshold are not listed and stay pending. |
+| **Audit log** | One row per decision (who, when, before and after status, reason, cost, should-cost, % over), written in the same transaction as the status change. Database triggers block edits and deletes, so it is append-only. A reason is required to reject and optional to approve. |
+| **Who acted** | A name typed into the UI (kept in the browser), with no login. A blank name is refused. |
+| **Risk note (optional, done)** | One line per supplier: open events with the highest severity, events being monitored, sole-source flag, and "only supplier for PART" (inferred from submission history). Shown on the review screen and the suppliers table. |
+| **Database** | `schema/schema.sql` was not provided, so it is written from the table list, plus an `uploads` table (one row per file, with its hash and report). Schema constraints back up the validator. |
+| **Frontend: stack** | A React + TypeScript (Vite) app served by the same FastAPI server, so there is one process to run. Node is only needed to build it. |
+| **Frontend: filters and sort** | The data tables filter and page on the server, since they can be large. Cost Review and the upload report already hold all their rows, so they filter and sort in the browser with the same rules. |
+| **Frontend: number filters** | On number columns a plain number means equals: `5` finds 5, not 25 or 35. |
+| **Frontend: split view** | Two stacked tables on the right; the bottom one follows the top through the schema's keys (at most two steps), to show related records. |
+| **Frontend: sticky header** | Column headings and filter boxes stay pinned while rows scroll, with a toggle to turn it off. |
+
+## What I skipped
+
+- Authentication and per-user permissions. The actor is self-declared, so the audit log records who *claims* to have acted.
+- Revision handling: a resubmission with different numbers is saved alongside the old one, not
+  linked as a "supersedes" chain.
+- Currency conversion (USD only), and checks that a supplier actually makes a part.
+- Fiscal-period window checks (format only), and an upper sanity bound on cost values.
+- Editing or deleting submissions, and master-data screens (out of scope per the brief).
+- Statistical robustness in should-cost (medians, outlier trimming, seasonality); the mean of approved history is deliberately simple.
+- Live re-estimation: should-costs are computed at first start and by `recompute`, not after each
+  approval. To refresh them, run `python -m src recompute` (`src/cli.py`); the server can keep running
+  while you do, and the new numbers show on the next page load.
+- A master review page for the submissions that are not flagged: pending rows within the threshold are
+  not listed on the Cost Review page, so there is no screen to review, approve or reject them and they stay
+  pending. A page listing every pending submission (flagged or not), with the same approve and reject
+  actions and audit logging, would close this gap.
+- Pagination and search on the data browser are basic (50 rows a page, substring search).
+- Frontend polish: no component library, no end-to-end browser tests (I checked the flows by hand in a headless browser).
+
+## Flow at a glance
+
+From an uploaded file to a logged decision:
+
+```mermaid
+flowchart TD
+    A[/"Supplier cost file<br/>.csv or .xlsx"/] --> B["Upload page<br/>checks each row:<br/>part, supplier, costs,<br/>period, cost sum,<br/>email, currency"]
+    B -.-> U[("uploads<br/>one log row per file")]
+
+    B --> C{"Row valid?"}
+    C -- "no" --> D["Reported as failed<br/>with field and reason<br/>(not saved)"]
+    C -- "yes" --> E{"Already saved?"}
+    E -- "yes" --> F["Shown as already on file<br/>(nothing added)"]
+    E -- "no" --> G[("cost_submissions<br/>status = pending")]
+
+    G -- "approved rows only" --> H["Should-cost per part<br/>= average of its commodity"]
+    G --> I{"Pending and over<br/>should-cost by 20%+?"}
+    H --> I
+
+    I -- "no" --> J["Stays pending<br/>(not on the review list)"]
+    I -- "yes" --> K["Cost Review page<br/>flagged queue"]
+
+    K --> L{"Reviewer decides"}
+    L -- "Approve" --> M["status = approved"]
+    L -- "Reject (with reason)" --> N["status = rejected"]
+    M --> O[("audit_log<br/>who, when, before and after, reason")]
+    N --> O
+
+    classDef store fill:#e8f1fb,stroke:#1f5fbf,color:#123;
+    classDef bad fill:#fdecea,stroke:#b42318,color:#421;
+    classDef good fill:#e7f6ee,stroke:#1a7f4b,color:#123;
+    classDef note fill:#fff7e0,stroke:#9a6700,color:#321;
+    class G,U,O store;
+    class D,N bad;
+    class M,K good;
+    class F,J note;
+```
