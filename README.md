@@ -81,11 +81,12 @@ typed in a number column falls back to the text rules. Filters apply after a sho
 away on Enter. The UI has one box per column; the API (`GET /api/tables/{table}?f=column:value&f=...`) also accepts
 several filters on the same column, e.g. `f=submitted_unit_cost:>=5&f=submitted_unit_cost:<=6`.
 
-**CLI** (same pipeline, no browser)
+**CLI** (same pipeline, no browser). Each command runs once and exits, so it can be run in a separate
+terminal/process while `python -m src serve` keeps running in the first one; both act on the same database file.
 
 ```bash
-python -m src upload data/bulk_upload_sample_with_errors.csv
-python -m src recompute      # rebuild should_cost_estimates
+python -m src upload data/bulk_upload_sample_with_errors.csv   # validate + save a file, print the per-row report
+python -m src recompute                                        # rebuild should_cost_estimates from approved submissions
 ```
 
 ## Data
@@ -145,6 +146,10 @@ without touching the other data files: `python data/generate_dummy_data.py --bul
 regenerates every CSV in `data/` instead.
 
 ## Tests
+
+Run both from an activated virtual environment (`source .venv/bin/activate`): the backend test requires it
+(pytest and FastAPI are installed only in `.venv`), and the frontend test works either way but this keeps
+one setup for both.
 
 ```bash
 python -m pytest -q                          # backend (pytest)
@@ -293,6 +298,16 @@ The brief left these open; the choices are mine and easy to change.
 - Pagination and search on the data browser are basic (50 rows a page, substring search).
 - Frontend polish: no component library, no end-to-end browser tests (I checked the flows by hand in a headless browser).
 
+## AI note
+
+This project was built with Claude Code, an AI coding assistant, working from the case-study brief and the
+provided data. The assistant wrote the code, the tests and this README, ran the tests, and checked the screens
+in a browser. The author directed the work throughout: chose what to build and change (the upload and data
+screens, the filters, sorting and split view, how the review queue behaves, the flag threshold and how
+should-cost is calculated) and reviewed and corrected the results. Where the brief was silent, the assistant
+proposed a choice and the author confirmed or changed it; those choices are listed under "Decisions and why".
+As with any generated code, it should be read and tested by a person before real use.
+
 ## Flow at a glance
 
 From an uploaded file to a logged decision:
@@ -330,3 +345,48 @@ flowchart TD
     class M,K good;
     class F,J note;
 ```
+
+## Note
+
+The brief's own review notes, and where each is answered in this README or checked directly against the app.
+
+### • Does the pipeline catch the bad rows in the sample file, and explain why?
+
+Yes. Uploading `data/bulk_upload_sample_with_errors.csv` saves the 3 valid rows and fails exactly the 5
+broken ones, each with the field and the reason (not just "upload failed"):
+
+| Row | Reason |
+|---|---|
+| 1 | Unknown part `SNS-9999` **and** unknown supplier `Unknown Supplier Co` |
+| 2 | Negative `submitted_unit_cost` (-1.2) and negative `overhead_cost` (-1.9) |
+| 3 | `submitted_unit_cost` is blank |
+| 4 | `submitted_by` is blank, and the costs don't sum to the unit cost |
+| 5 | `fiscal_period` `NOT-A-PERIOD` is invalid |
+
+See "Why each bad row in `bulk_upload_sample_with_errors.csv` is caught" above for the full explanation, and
+`tests/test_upload.py::test_error_file_rejects_exactly_the_five_broken_rows`, which asserts this exact result.
+
+### • Is the should-cost logic sensible, and does approving or rejecting get logged properly?
+
+Should-cost: every part's estimate is the average approved unit cost of its commodity (`should_cost_estimates`,
+kept separate from `cost_submissions`), with the sample size it is based on recorded and shown on the review
+screen. See "Decisions and why" above for the reasoning and its trade-off.
+
+Logging: approving or rejecting writes one row to `audit_log` with the actor, timestamp, the status before and
+after, the reason, and the cost context at that moment — checked directly:
+
+- Before any decision, `audit_log` had 0 rows.
+- Approving one submission added exactly 1 row: `actor`, `before_status` → `after_status` (`pending` →
+  `approved`), the reason, and the cost/should-cost/percent-over at that moment.
+- A direct `UPDATE audit_log ...` against the database was refused: *"audit_log is append-only"*. This is a
+  database trigger (`schema/schema.sql`), not just application code, so it holds even outside the app.
+
+See `tests/test_review.py` (`test_decision_is_logged_with_before_and_after`,
+`test_repeated_decisions_append_rows`, `test_audit_log_is_append_only`) for the automated checks.
+
+### • No screens for managing suppliers, parts or facilities?
+
+Confirmed. Every route in `src/web.py` is either read-only (`GET`) or one of the two write actions the brief
+asks for — uploading a file and deciding on a submission (`POST /api/upload`, `POST /api/review/{id}`). There
+is no route, and no button or form in the frontend, to create, edit or delete a supplier, part or facility;
+the "Data tables" view only displays them.
